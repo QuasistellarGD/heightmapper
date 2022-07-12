@@ -433,7 +433,7 @@ map = (function () {
         // Cache the screenshot
         const renderedCell = await scene.screenshot();
         captures[count] = renderedCell.url;
-        // saveAs(renderedCell.blob, `render-cell-${count}.png`);
+        saveAs(renderedCell.blob, `render-cell-${count}.png`);
         console.log(`Cell ${count} rendered`);
         count++
       });
