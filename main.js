@@ -307,14 +307,15 @@ map = (function () {
     
     gui.API_KEY = query.api_key || 'mapzen-XXXXXX';
     gui.add(gui, 'API_KEY').name("API KEY").onChange(function(value) {
-      scene.config.sources["elevation-high"].url_params.api_key = value;
-      scene.config.layers["terrain-high"].enabled = true;
+      scene.config.sources.elevation.url_params.api_key = value;
+      // scene.config.sources["elevation-high"].url_params.api_key = value;
+      // scene.config.layers["terrain-high"].enabled = true;
       scene.updateConfig();
     });
     
     gui.export = function () {
       return scene.screenshot().then(function(screenshot) {
-        if (gui.API_KEY === 'mapzen-XXXXXX') {
+        /*if (gui.API_KEY === 'mapzen-XXXXXX') {
           alert('Please enter your API key!')
           scene.config.layers["terrain-high"].enabled = false;
           scene.updateConfig();
@@ -322,10 +323,10 @@ map = (function () {
           alert('Please enter your own API key!')
           scene.config.layers["terrain-high"].enabled = false;
           scene.updateConfig();
-        } else {
+        } else {*/
            // uses FileSaver.js: https://github.com/eligrey/FileSaver.js/
            saveAs(screenshot.blob, 'heightmapper-' + (+new Date()) + '.png');
-        }
+        //}
       });
     }
     gui.add(gui, 'export');
