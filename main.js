@@ -26,6 +26,7 @@ map = (function () {
   var zoomRender = 2;
   const min_zoomRender = 1;
   const max_zoomRender = 256; // if you need more, fork this repo and use your own api key!
+  var renderSaveEachCell = true;
   
   var renderName = {name: 'render'};
   
@@ -336,6 +337,11 @@ map = (function () {
       
     });
     
+    gui.renderSaveEachCell = renderSaveEachCell;
+    gui.add(gui, 'renderSaveEachCell').name("Save Each Cell").onChange(function(value) {
+      renderSaveEachCell = value
+    });
+    
     gui.renderName = renderName.name;
     gui.add(gui, 'renderName').name('Render Name').onChange(function(value) {
       renderName.name = value;
@@ -432,8 +438,11 @@ map = (function () {
       await awaitViewComplete().then(async () => {
         // Cache the screenshot
         const renderedCell = await scene.screenshot();
-        captures[count] = renderedCell.url;
-        // saveAs(renderedCell.blob, `render-cell-${count}.png`);
+        if(renderSaveEachCell) {
+          saveAs(renderedCell.blob, `render-cell-${count}.png`);
+        } else {
+          captures[count] = renderedCell.url;
+        }
         console.log(`Cell ${count} rendered`);
         count++
       });
@@ -441,25 +450,27 @@ map = (function () {
 
     map.fitBounds(originalBounds);
 
-    logRenderStep("Building final image");
-    
-    // Stitch the image together
-    const renderCanvas = document.createElement('canvas');
-    renderCanvas.id = "renderCanvas";
-    renderCanvas.width = outputX;
-    renderCanvas.height = outputY;
-    const renderContext = renderCanvas.getContext("2d");
-    
-    for(let i = 0; i < captures.length; i++) {
-      const xPixel = captureOrigins[i].x * zoomFactor;
-      const yPixel = captureOrigins[i].y * zoomFactor;
-      await addImageToCanvas(renderContext, captures[i], xPixel, yPixel);
-      console.log("added image to canvas");
+    if(!renderSaveEachCell) {
+      logRenderStep("Building final image");
+
+      // Stitch the image together
+      const renderCanvas = document.createElement('canvas');
+      renderCanvas.id = "renderCanvas";
+      renderCanvas.width = outputX;
+      renderCanvas.height = outputY;
+      const renderContext = renderCanvas.getContext("2d");
+
+      for(let i = 0; i < captures.length; i++) {
+        const xPixel = captureOrigins[i].x * zoomFactor;
+        const yPixel = captureOrigins[i].y * zoomFactor;
+        await addImageToCanvas(renderContext, captures[i], xPixel, yPixel);
+        console.log("added image to canvas");
+      }
+
+      logRenderStep("Saving render");
+      const blob = await getCanvasBlob(renderCanvas);
+      saveAs(blob, `${renderName.name ?? 'render'}.png`);
     }
-    
-    logRenderStep("Saving render");
-    const blob = await getCanvasBlob(renderCanvas);
-    saveAs(blob, `${renderName.name ?? 'render'}.png`);
     
     // Clean up:
     logRenderStep("Cleaning up");
