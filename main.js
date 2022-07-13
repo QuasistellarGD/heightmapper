@@ -27,6 +27,7 @@ map = (function () {
   const min_zoomRender = 1;
   const max_zoomRender = 256; // if you need more, fork this repo and use your own api key!
   var renderSaveEachCell = true;
+  var renderSaveRowsBottomToTop = true;
   
   var renderName = {name: 'render'};
   
@@ -342,6 +343,11 @@ map = (function () {
       renderSaveEachCell = value
     });
     
+    gui.renderSaveRowsBottomToTop = renderSaveRowsBottomToTop;
+    gui.add(gui, 'renderSaveRowsBottomToTop').name("Save rows bottom to top").onChange(function(value) {
+      renderSaveRowsBottomToTop = value
+    });
+    
     gui.renderName = renderName.name;
     gui.add(gui, 'renderName').name('Render Name').onChange(function(value) {
       renderName.name = value;
@@ -440,7 +446,10 @@ map = (function () {
         const renderedCell = await scene.screenshot();
         if(renderSaveEachCell) {
           var x = Math.floor(count/zoomRender);
-          var y = count % zoomRender;
+          var y = (count % zoomRender);
+          if(renderSaveRowsBottomToTop) {
+            y = (zoomRender-1) - y;
+          }
           saveAs(renderedCell.blob, `${renderName.name ?? 'render'}_${x}_${y}.png`);
         } else {
           captures[count] = renderedCell.url;
