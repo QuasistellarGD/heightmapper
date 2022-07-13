@@ -35,6 +35,8 @@ Uses [Mapzen's](http://mapzen.com/tangrams/tangram) global [elevation service](h
 
 ### To run locally:
 
+You will need an API Key (yip, get rid of the white map, 403 Forbidden errors etc.). You can get one from https://www.nextzen.org/. Then you will need to set it in the scene.yaml file.
+
 Start a web server in the repo's directory:
 
     python -m SimpleHTTPServer 8000
