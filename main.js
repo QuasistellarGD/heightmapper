@@ -441,7 +441,7 @@ map = (function () {
         if(renderSaveEachCell) {
           var x = Math.floor(max_zoomRender/count);
           var y = count % max_zoomRender;
-          saveAs(renderedCell.blob, `${renderName.name ?? 'render'}_$x_$y.png`);
+          saveAs(renderedCell.blob, `${renderName.name ?? 'render'}_${x}_${y}.png`);
         } else {
           captures[count] = renderedCell.url;
         }
