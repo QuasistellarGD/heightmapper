@@ -439,8 +439,8 @@ map = (function () {
         // Cache the screenshot
         const renderedCell = await scene.screenshot();
         if(renderSaveEachCell) {
-          var x = Math.floor(count/max_zoomRender);
-          var y = count % max_zoomRender;
+          var x = Math.floor(count/zoomRender);
+          var y = count % zoomRender;
           saveAs(renderedCell.blob, `${renderName.name ?? 'render'}_${x}_${y}.png`);
         } else {
           captures[count] = renderedCell.url;
