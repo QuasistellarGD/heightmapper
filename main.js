@@ -443,7 +443,7 @@ map = (function () {
       }();
       await awaitViewComplete().then(async () => {
         // Cache the screenshot
-        const renderedCell = await scene.screenshot();
+        const renderedCell = await scene.screenshot({ background: 'transparent' });
         if(renderSaveEachCell) {
           var x = Math.floor(count/zoomRender);
           var y = (count % zoomRender);
