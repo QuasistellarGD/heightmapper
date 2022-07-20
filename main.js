@@ -418,11 +418,14 @@ map = (function () {
         // Get a bounding box of the Points using northwest and southeast:
         const nwPoint = L.point(i * widthPerCell, j * heightPerCell, false);
         const sePoint = L.point(nwPoint.x + widthPerCell, nwPoint.y + heightPerCell, false);
+        console.log(nwPoint,sePoint);
         // Use the map container and not layer PointToLatLng for the most current position.
         const topLeftCoords = map.containerPointToLatLng(nwPoint);
         const bottomRightCoords = map.containerPointToLatLng(sePoint);
+        console.log(topLeftCoords,bottomRightCoords);
         // Coordinate bounding box of where we want to be:
         const bounds = L.latLngBounds(topLeftCoords, bottomRightCoords);
+        console.log(bounds);
         // Cache the origin point of the cell for later (rounding errrors);
         captureOrigins.push(nwPoint);
         cells.push(bounds);
