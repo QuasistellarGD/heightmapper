@@ -226,6 +226,7 @@ map = (function () {
     var zrange = (gui.u_max - gui.u_min);
     var xscale = zrange / scene.view.size.meters.x;
     gui.scaleFactor = xscale +''; // convert to string to make the display read-only
+    console.log("Scene view size in meters(?)",scene.view.size.meters);
     
     scene.styles.hillshade.shaders.uniforms.u_min = minadj;
     scene.styles.hillshade.shaders.uniforms.u_max = maxadj;
@@ -418,11 +419,9 @@ map = (function () {
         // Get a bounding box of the Points using northwest and southeast:
         const nwPoint = L.point(i * widthPerCell, j * heightPerCell, false);
         const sePoint = L.point(nwPoint.x + widthPerCell, nwPoint.y + heightPerCell, false);
-        console.log(nwPoint,sePoint);
         // Use the map container and not layer PointToLatLng for the most current position.
         const topLeftCoords = map.containerPointToLatLng(nwPoint);
         const bottomRightCoords = map.containerPointToLatLng(sePoint);
-        console.log(topLeftCoords,bottomRightCoords);
         // Coordinate bounding box of where we want to be:
         const bounds = L.latLngBounds(topLeftCoords, bottomRightCoords);
         console.log(bounds);
